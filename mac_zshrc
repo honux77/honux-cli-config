@@ -17,15 +17,17 @@ setopt CORRECT
 # 경로
 # -----------------------------
 export PATH="/opt/homebrew/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 
 # -----------------------------
 # 색상 활성화
 # -----------------------------
 autoload -U colors && colors
+export CLICOLOR=1
+alias ls='ls -G'
 
 # -----------------------------
-# 프롬프트 (가볍고 팬시)
+# 프롬프트 fallback (starship 미설치 시 사용)
 # -----------------------------
 setopt PROMPT_SUBST
 
@@ -33,23 +35,25 @@ git_branch() {
   git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
 
-PROMPT='%F{cyan}%n@%m%f %F{yellow}%~%f $(git_branch && echo "%F{green}($(git_branch))%f") 
+PROMPT='%F{cyan}%n@%m%f %F{yellow}%~%f $(git_branch && echo "%F{green}($(git_branch))%f")
 %F{magenta}➜%f '
 
 # -----------------------------
 # 자동완성
 # -----------------------------
-
-# 메뉴 선택 모드 활성화
 zstyle ':completion:*' menu select
 autoload -Uz compinit
 compinit
 
 # -----------------------------
-# 플러그인 (brew 설치 기준)
+# 플러그인 (brew install 기준)
+# brew install zsh-autosuggestions zsh-syntax-highlighting
 # -----------------------------
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # -----------------------------
 # fzf
@@ -57,21 +61,17 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # -----------------------------
-# alias
-# -----------------------------
-alias ll='ls -alF'
-alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
-alias gp='git push'
-alias cdkd='cdk diff'
-alias cdks='cdk synth'
-
-# -----------------------------
 # Node / nvm
 # -----------------------------
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# -----------------------------
+# alias
+# -----------------------------
+alias ll='ls -alF'
+alias cdkd='cdk diff'
+alias cdks='cdk synth'
 
 # -----------------------------
 # Git 기본 단축
@@ -85,6 +85,7 @@ alias gcm='git commit -m'
 alias gp='git push'
 alias gpl='git pull'
 alias gl='git log --oneline --graph --decorate --all'
+alias glg='git log --graph --pretty=format:"%C(yellow)%h%Creset - %C(cyan)%an%Creset - %C(green)%cr%Creset - %s" --abbrev-commit'
 alias gd='git diff'
 alias gds='git diff --staged'
 
@@ -124,10 +125,8 @@ alias grv='git remote -v'
 alias gundo='git reset --soft HEAD~1'
 alias ghard='git reset --hard'
 
-alias glg='git log --graph --pretty=format:"%C(yellow)%h%Creset - %C(cyan)%an%Creset - %C(green)%cr%Creset - %s" --abbrev-commit'
-
-export PATH="$HOME/.local/bin:$PATH"
-eval "$(starship init zsh)"
-
-
-
+# -----------------------------
+# starship 프롬프트 (설치된 경우 fallback PROMPT 덮어씀)
+# brew install starship
+# -----------------------------
+command -v starship &>/dev/null && eval "$(starship init zsh)"

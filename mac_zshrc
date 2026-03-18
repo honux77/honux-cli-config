@@ -130,3 +130,14 @@ alias ghard='git reset --hard'
 # brew install starship
 # -----------------------------
 command -v starship &>/dev/null && eval "$(starship init zsh)"
+
+alias vim="nvim"
+alias vi="nvim"
+
+
+# SDKMAN
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# zoxide
+eval "$(zoxide init zsh)"

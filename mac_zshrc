@@ -147,3 +147,14 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 #brew install fastfetch
 fastfetch
+
+# -----------------------------
+# icat - 터미널에서 이미지 보기 (Ghostty / Kitty Graphics Protocol)
+# -----------------------------
+function icat() {
+  if (( $# == 0 )); then
+    echo "Usage: icat <image_file>..."
+    return 1
+  fi
+  kitten icat "$@"
+}

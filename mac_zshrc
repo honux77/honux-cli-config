@@ -146,7 +146,7 @@ eval "$(zoxide init zsh)"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 #brew install fastfetch
-fastfetch
+[[ "$TERM_PROGRAM" != "vscode" ]] && fastfetch
 
 # -----------------------------
 # icat - 터미널에서 이미지 보기 (Ghostty / Kitty Graphics Protocol)
@@ -157,4 +157,13 @@ function icat() {
     return 1
   fi
   kitten icat "$@"
+}
+
+# ghostty reload
+gdark() {
+  ln -sf ~/dotfiles/ghostty-dark.config ~/.config/ghostty/config
+}
+
+glight() {
+  ln -sf ~/dotfiles/ghostty-light.config ~/.config/ghostty/config
 }
